@@ -8,6 +8,18 @@ services:
       - discovery.type=single-node
     volumes:
       - esdata:/usr/share/elasticsearch/data
+  backend:
+    build:
+      context: .
+    ports:
+      - 3000:3000
+    environment:
+      GOPATH: /go
+    volumes:
+      - .:/app
+      - go:/go
+    command: ["fresh"]
 
 volumes:
   esdata:
+  go:
