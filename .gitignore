@@ -19,3 +19,28 @@
 
 # Temporary files
 tmp/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Dependency directories
+node_modules
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Build
+dist
+
+# Cache
+.parcel-cache

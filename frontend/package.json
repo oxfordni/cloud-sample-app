@@ -1,0 +1,36 @@
+{
+  "name": "goes",
+  "version": "1.0.0",
+  "description": "go+es",
+  "goes": "src/index.html",
+  "targets": {
+    "goes": {
+      "distDir": "dist"
+    }
+  },
+  "scripts": {
+    "build": "parcel build src/index.html",
+    "start": "parcel src/index.html --port 3001 --hmr-port 3001",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joaocarmo/goes.git"
+  },
+  "keywords": [
+    "go",
+    "elasticsearch"
+  ],
+  "author": "João Carmo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/joaocarmo/goes/issues"
+  },
+  "homepage": "https://github.com/joaocarmo/goes#readme",
+  "dependencies": {
+    "antd": "^4.16.6",
+    "parcel": "^2.0.0-beta.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}

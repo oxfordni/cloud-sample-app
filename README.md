@@ -12,6 +12,8 @@ docker compose up -d
 docker compose down -v
 ```
 
+The app will be exposed on the por `3001`.
+
 ## API
 
 Random movie and series quotes.
