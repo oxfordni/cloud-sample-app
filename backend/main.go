@@ -115,7 +115,7 @@ func GetMovieQuote(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 	}
 
-	fmt.Println("[GET] quote")
+	log.Println("[GET] quote")
 
 	respondWithJSON(w, http.StatusOK, quote)
 }
@@ -131,17 +131,39 @@ func CreateMovieQuote(ctx *context.Context, esClient *elastic.Client) func(w htt
 		}
 
 		quote.Id = createdQuote.Id
-		fmt.Println("[CREATE] quote " + quote.Id)
+		log.Println("[CREATE] quote " + quote.Id)
 
 		respondWithJSON(w, http.StatusOK, quote)
+
+		// Flush to make sure the document was written
+		_, err = esClient.Flush().Index(ES_INDEX_NAME).Do(*ctx)
+		if err != nil {
+			log.Fatalln(err)
+		}
 	}
 }
 
-func ReadMovieQuote(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	quoteID := vars["id"]
+func ReadMovieQuote(ctx *context.Context, esClient *elastic.Client) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		quoteID := vars["id"]
 
-	fmt.Println("[READ] quote " + quoteID)
+		// Get the document with the specified ID
+		readQuote, err := esClient.Get().Index(ES_INDEX_NAME).Id(quoteID).Do(*ctx)
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		if readQuote.Found {
+			log.Println("[READ] quote " + readQuote.Id)
+
+			var quote Quote
+			_ = json.Unmarshal(readQuote.Source, &quote)
+			quote.Id = readQuote.Id
+
+			respondWithJSON(w, http.StatusOK, quote)
+		}
+	}
 }
 
 func UpdateMovieQuote(w http.ResponseWriter, r *http.Request) {
@@ -151,7 +173,7 @@ func UpdateMovieQuote(w http.ResponseWriter, r *http.Request) {
 	var quote Quote
 	_ = json.NewDecoder(r.Body).Decode(&quote)
 
-	fmt.Println("[UPDATE] quote " + quoteID)
+	log.Println("[UPDATE] quote " + quoteID)
 
 	respondWithJSON(w, http.StatusOK, quote)
 }
@@ -160,7 +182,7 @@ func DeleteMovieQuote(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	quoteID := vars["id"]
 
-	fmt.Println("[DELETE] quote " + quoteID)
+	log.Println("[DELETE] quote " + quoteID)
 }
 
 func es() (*context.Context, *elastic.Client) {
@@ -192,9 +214,9 @@ func es() (*context.Context, *elastic.Client) {
 			log.Fatalln(err)
 		}
 		if !createIndex.Acknowledged {
-			fmt.Println("[INDEX] " + ES_INDEX_NAME + " not acknowledged")
+			log.Println("[INDEX] " + ES_INDEX_NAME + " not acknowledged")
 		}
-		fmt.Println("[INDEX] " + ES_INDEX_NAME + " created")
+		log.Println("[INDEX] " + ES_INDEX_NAME + " created")
 	}
 
 	return &ctx, client
@@ -206,7 +228,7 @@ func app(ctx *context.Context, esClient *elastic.Client) {
 	router.HandleFunc("/", IndexHandler)
 	router.HandleFunc("/api/"+API_VERSION+"/movie-quotes", GetMovieQuote).Methods("GET")
 	router.HandleFunc("/api/"+API_VERSION+"/movie-quote", CreateMovieQuote(ctx, esClient)).Methods("POST")
-	router.HandleFunc("/api/"+API_VERSION+"/movie-quote/{id}", ReadMovieQuote).Methods("GET")
+	router.HandleFunc("/api/"+API_VERSION+"/movie-quote/{id}", ReadMovieQuote(ctx, esClient)).Methods("GET")
 	router.HandleFunc("/api/"+API_VERSION+"/movie-quote/{id}", UpdateMovieQuote).Methods("PUT")
 	router.HandleFunc("/api/"+API_VERSION+"/movie-quote/{id}", DeleteMovieQuote).Methods("DELETE")
 
@@ -214,7 +236,7 @@ func app(ctx *context.Context, esClient *elastic.Client) {
 }
 
 func main() {
-	fmt.Println("Listening on port " + SERVER_PORT + "...")
+	log.Println("Listening on port " + SERVER_PORT + "...")
 
 	app(es())
 }

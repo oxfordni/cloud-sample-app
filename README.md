@@ -22,4 +22,7 @@ Random movie and series quotes.
 
 ```txt
 GET /api/v1/movie-quotes
+
+POST /api/v1/movie-quote
+GET /api/v1/movie-quote/{id}
 ```
