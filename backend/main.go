@@ -18,10 +18,10 @@ var API_VERSION string
 var MOVIE_QUOTES string
 
 type Quote struct {
-	Quote            string
-	Role             string
-	Show             string
-	ContainAdultLang bool
+	Quote            string `json:"quote"`
+	Role             string `json:"role"`
+	Show             string `json:"show"`
+	ContainAdultLang bool   `json:"contain_adult_lang"`
 }
 
 func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {

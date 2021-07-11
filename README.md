@@ -12,7 +12,9 @@ docker compose up -d
 docker compose down -v
 ```
 
-The app will be exposed on the por `3001`.
+The app will be exposed on the port `3001`.
+
+The ElasticSearch Admin is reachable on port `8080` and the secret is `goes`.
 
 ## API
 
