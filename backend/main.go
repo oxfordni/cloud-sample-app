@@ -57,7 +57,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, HOME_HTML, APP_TITLE, APP_TITLE, WELCOME_MESSAGE)
 }
 
-func MovieQuotesHandler(w http.ResponseWriter, r *http.Request) {
+func GetMovieQuote(w http.ResponseWriter, r *http.Request) {
 	MOVIE_QUOTES = "https://movie-quote-api.herokuapp.com/v1/quote/?format=json"
 
 	resp, err := http.Get(MOVIE_QUOTES)
@@ -76,7 +76,34 @@ func MovieQuotesHandler(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 	}
 
+	fmt.Println("[GET] quote")
+
 	respondWithJSON(w, http.StatusOK, quote)
+}
+
+func CreateMovieQuote(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("[CREATE] quote ")
+}
+
+func ReadMovieQuote(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	quoteID := vars["id"]
+
+	fmt.Println("[READ] quote " + quoteID)
+}
+
+func UpdateMovieQuote(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	quoteID := vars["id"]
+
+	fmt.Println("[UPDATE] quote " + quoteID)
+}
+
+func DeleteMovieQuote(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	quoteID := vars["id"]
+
+	fmt.Println("[DELETE] quote " + quoteID)
 }
 
 func app() {
@@ -85,7 +112,11 @@ func app() {
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/", IndexHandler)
-	router.HandleFunc("/api/"+API_VERSION+"/movie-quotes", MovieQuotesHandler)
+	router.HandleFunc("/api/"+API_VERSION+"/movie-quotes", GetMovieQuote).Methods("GET")
+	router.HandleFunc("/api/"+API_VERSION+"/movie-quote", CreateMovieQuote).Methods("POST")
+	router.HandleFunc("/api/"+API_VERSION+"/movie-quote/{id}", ReadMovieQuote).Methods("GET")
+	router.HandleFunc("/api/"+API_VERSION+"/movie-quote/{id}", UpdateMovieQuote).Methods("PUT")
+	router.HandleFunc("/api/"+API_VERSION+"/movie-quote/{id}", DeleteMovieQuote).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":"+SERVER_PORT, router))
 }

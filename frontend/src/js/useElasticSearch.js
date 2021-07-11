@@ -9,9 +9,16 @@ const useElasticSearch = (apiEndpoint, options) => {
     try {
       setIsLoading(true)
       const res = await fetch(url, opts)
-      const resData = await res.json()
-      setData(resData)
-      setError(null)
+      const { ok, status, statusText } = res
+
+      if (ok) {
+        const resData = await res.json()
+        setData(resData)
+        setError(null)
+      } else {
+        setData(null)
+        setError({ status, statusText })
+      }
     } catch (err) {
       setData(null)
       setError(err)

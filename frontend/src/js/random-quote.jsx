@@ -1,10 +1,23 @@
 import React from 'react'
-import { Alert, Skeleton, Tag } from 'antd'
+import { Alert, Skeleton, Tag, Typography } from 'antd'
 import useElasticSearch from './useElasticSearch'
 import api from './api'
 
+const { Text } = Typography
+
 const RandomQuote = () => {
   const [data, isLoading, error] = useElasticSearch(api.getRandomQuote)
+
+  if (error) {
+    console.log(error)
+    return (
+      <Alert
+        message="ERROR"
+        description={<Text code>{JSON.stringify(error, null, 2)}</Text>}
+        type="error"
+      />
+    )
+  }
 
   return (
       <Alert
@@ -23,7 +36,7 @@ const RandomQuote = () => {
                 <div>
                   <Tag color="volcano">{data?.show}</Tag>
                   {data?.contain_adult_lang && (
-                    <Tag color="magenta">{data?.contain_adult_lang}</Tag>
+                    <Tag color="magenta">Adult</Tag>
                   )}
                 </div>
               </>
