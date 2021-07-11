@@ -1,41 +1,26 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 
+	// "reflect"
+	"time"
+
 	"github.com/gorilla/mux"
+	"github.com/olivere/elastic"
 )
 
-var SERVER_PORT string
-var WELCOME_MESSAGE string
-var APP_TITLE string
-var HOME_HTML string
-var API_VERSION string
-var MOVIE_QUOTES string
-
-type Quote struct {
-	Quote            string `json:"quote"`
-	Role             string `json:"role"`
-	Show             string `json:"show"`
-	ContainAdultLang bool   `json:"contain_adult_lang"`
-}
-
-func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
-	response, _ := json.Marshal(payload)
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(code)
-	w.Write(response)
-}
-
-func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	APP_TITLE = "go+es"
-	WELCOME_MESSAGE = "Welcome to <span style=\"color: #d67936;\">" + APP_TITLE + "</span> !"
-	HOME_HTML = `
+// Configuration
+const SERVER_PORT = "3000"
+const ES_SERVER = "http://elasticsearch:9200"
+const APP_TITLE = "go+es"
+const WELCOME_MESSAGE = "Welcome to <span style=\"color: #d67936;\">" + APP_TITLE + "</span> !"
+const HOME_HTML = `
 <!doctype html>
 <html lang="en">
 <head>
@@ -53,13 +38,66 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 </body>
 </html>
 `
+const API_VERSION = "v1"
+const MOVIE_QUOTES = "https://movie-quote-api.herokuapp.com/v1/quote/?format=json"
 
+type Quote struct {
+	Quote            string `json:"quote"`
+	Role             string `json:"role"`
+	Show             string `json:"show"`
+	ContainAdultLang bool   `json:"contain_adult_lang"`
+}
+
+type ESQuote struct {
+	Quote
+	Created time.Time             `json:"created,omitempty"`
+	Suggest *elastic.SuggestField `json:"suggest_field,omitempty"`
+}
+
+const esMapping = `
+{
+	"settings":{
+		"number_of_shards": 1,
+		"number_of_replicas": 0
+	},
+	"mappings":{
+		"tweet":{
+			"properties":{
+				"quote":{
+					"type":"text",
+					"store": true,
+					"fielddata": true
+				},
+				"role":{
+					"type":"keyword"
+				},
+				"show":{
+					"type":"keyword"
+				},
+				"created":{
+					"type":"date"
+				},
+				"suggest_field":{
+					"type":"completion"
+				}
+			}
+		}
+	}
+}`
+
+func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
+	response, _ := json.Marshal(payload)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+	w.Write(response)
+}
+
+func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, HOME_HTML, APP_TITLE, APP_TITLE, WELCOME_MESSAGE)
 }
 
 func GetMovieQuote(w http.ResponseWriter, r *http.Request) {
-	MOVIE_QUOTES = "https://movie-quote-api.herokuapp.com/v1/quote/?format=json"
-
 	resp, err := http.Get(MOVIE_QUOTES)
 	if err != nil {
 		log.Fatalln(err)
@@ -106,9 +144,24 @@ func DeleteMovieQuote(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("[DELETE] quote " + quoteID)
 }
 
-func app() {
-	API_VERSION = "v1"
+func es() {
+	ctx := context.Background()
 
+	// Connect to the default Elasticsearch @ localhost:9200
+	client, err := elastic.NewClient(elastic.SetURL(ES_SERVER))
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	// Ping the Elasticsearch server
+	info, code, err := client.Ping(ES_SERVER).Do(ctx)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Printf("[ElasticSearch] Returned with code %d and version %s\n", code, info.Version.Number)
+}
+
+func app() {
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/", IndexHandler)
@@ -122,9 +175,8 @@ func app() {
 }
 
 func main() {
-	SERVER_PORT = "3000"
-
 	fmt.Println("Listening on port " + SERVER_PORT + "...")
 
+	es()
 	app()
 }
