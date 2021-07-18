@@ -24,7 +24,7 @@ const RandomQuote = () => {
         message="Random Quote"
         description={
           isLoading
-            ? <Skeleton active />
+            ? <Skeleton active paragraph={{ width: 512 }} />
             : (
               <>
                 <p>
