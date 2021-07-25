@@ -1,7 +1,6 @@
 package server
 
 import (
-	"context"
 	"encoding/json"
 	"io/ioutil"
 	"log"
@@ -11,14 +10,6 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/olivere/elastic/v7"
-)
-
-const (
-	DEVELOPMENT = true
-	DEFAULT_QUOTE_COUNT = 10
-	MOVIE_QUOTES = "https://movie-quote-api.herokuapp.com/v1/quote/?format=json"
-	ES_SERVER = "http://elasticsearch:9200"
-	ES_INDEX_NAME = "quote"
 )
 
 type Quote struct {
@@ -51,8 +42,8 @@ func parseQuoteHits(esHits []*elastic.SearchHit) []Quote {
 	return results
 }
 
-func GetMovieQuote(w http.ResponseWriter, r *http.Request) {
-	resp, err := http.Get(MOVIE_QUOTES)
+func (s Server) GetMovieQuote(w http.ResponseWriter, r *http.Request) {
+	resp, err := http.Get(s.External.MovieQuotes)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -73,148 +64,153 @@ func GetMovieQuote(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, http.StatusOK, quote)
 }
 
-func CreateMovieQuote(ctx *context.Context, esClient *elastic.Client) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var quote Quote
-		_ = json.NewDecoder(r.Body).Decode(&quote)
+func (s Server) CreateMovieQuote(w http.ResponseWriter, r *http.Request) {
+	ctx := s.es.GetContext()
+	esClient := s.es.GetClient()
 
-		createdQuote, err := esClient.
-			Index().
-			Index(ES_INDEX_NAME).
-			BodyJson(quote).
-			Pretty(DEVELOPMENT).
-			Do(*ctx)
-		if err != nil {
-			log.Fatalln(err)
-		}
+	var quote Quote
+	_ = json.NewDecoder(r.Body).Decode(&quote)
 
-		quote.Id = createdQuote.Id
-		log.Println("[CREATE] quote " + quote.Id)
+	createdQuote, err := esClient.
+		Index().
+		Index(s.es.Config.IndexName).
+		BodyJson(quote).
+		Pretty(s.Server.Development).
+		Do(*ctx)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-		respondWithJSON(w, http.StatusOK, quote)
+	quote.Id = createdQuote.Id
+	log.Println("[CREATE] quote " + quote.Id)
 
-		// Flush to make sure the document was written
-		_, err = esClient.Flush().Index(ES_INDEX_NAME).Do(*ctx)
-		if err != nil {
-			log.Fatalln(err)
-		}
+	respondWithJSON(w, http.StatusOK, quote)
+
+	// Flush to make sure the document was written
+	_, err = esClient.Flush().Index(s.es.Config.IndexName).Do(*ctx)
+	if err != nil {
+		log.Fatalln(err)
 	}
 }
 
-func ReadMovieQuoteAll(ctx *context.Context, esClient *elastic.Client) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		var quoteFrom int
-		var quoteTo int
+func (s Server) ReadMovieQuoteAll(w http.ResponseWriter, r *http.Request) {
+	ctx := s.es.GetContext()
+	esClient := s.es.GetClient()
 
-		if vars["from"] == "" {
-			quoteFrom = 0
-		} else {
-			quoteFrom, _ = strconv.Atoi(vars["from"])
-		}
+	vars := mux.Vars(r)
+	var quoteFrom int
+	var quoteTo int
 
-		if vars["to"] == "" {
-			quoteTo = DEFAULT_QUOTE_COUNT
-		} else {
-			quoteTo, _ = strconv.Atoi(vars["from"])
-		}
-
-		// Get all documents
-		readQuotes, err := esClient.
-			Search().
-			Index(ES_INDEX_NAME).
-			From(quoteFrom).Size(quoteTo).
-			Pretty(DEVELOPMENT).
-			Do(*ctx)
-		if err != nil {
-			log.Fatalln(err)
-		}
-
-		log.Println("[READ] quotes " + strconv.FormatInt(readQuotes.TotalHits(), 10))
-
-		allQuotes := parseQuoteHits(readQuotes.Hits.Hits)
-
-		respondWithJSON(w, http.StatusOK, allQuotes)
+	if vars["from"] == "" {
+		quoteFrom = 0
+	} else {
+		quoteFrom, _ = strconv.Atoi(vars["from"])
 	}
+
+	if vars["to"] == "" {
+		quoteTo = s.App.MaxResults
+	} else {
+		quoteTo, _ = strconv.Atoi(vars["from"])
+	}
+
+	// Get all documents
+	readQuotes, err := esClient.
+		Search().
+		Index(s.es.Config.IndexName).
+		From(quoteFrom).Size(quoteTo).
+		Pretty(s.Server.Development).
+		Do(*ctx)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println("[READ] quotes " + strconv.FormatInt(readQuotes.TotalHits(), 10))
+
+	allQuotes := parseQuoteHits(readQuotes.Hits.Hits)
+
+	respondWithJSON(w, http.StatusOK, allQuotes)
 }
 
-func ReadMovieQuote(ctx *context.Context, esClient *elastic.Client) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		quoteID := vars["id"]
+func (s Server) ReadMovieQuote(w http.ResponseWriter, r *http.Request) {
+	ctx := s.es.GetContext()
+	esClient := s.es.GetClient()
 
-		// Get the document with the specified ID
-		readQuote, err := esClient.
-			Get().
-			Index(ES_INDEX_NAME).
-			Id(quoteID).
-			Pretty(DEVELOPMENT).
-			Do(*ctx)
-		if err != nil {
-			log.Fatalln(err)
-		}
+	vars := mux.Vars(r)
+	quoteID := vars["id"]
 
-		if readQuote.Found {
-			log.Println("[READ] quote " + readQuote.Id)
-
-			var quote Quote
-			_ = json.Unmarshal(readQuote.Source, &quote)
-			quote.Id = readQuote.Id
-
-			respondWithJSON(w, http.StatusOK, quote)
-		} else {
-			log.Println("[READ] quote not found" + quoteID)
-		}
+	// Get the document with the specified ID
+	readQuote, err := esClient.
+		Get().
+		Index(s.es.Config.IndexName).
+		Id(quoteID).
+		Pretty(s.Server.Development).
+		Do(*ctx)
+	if err != nil {
+		log.Fatalln(err)
 	}
-}
 
-func UpdateMovieQuote(ctx *context.Context, esClient *elastic.Client) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		quoteID := vars["id"]
+	if readQuote.Found {
+		log.Println("[READ] quote " + readQuote.Id)
 
 		var quote Quote
-		_ = json.NewDecoder(r.Body).Decode(&quote)
-
-		esScript := elastic.
-			NewScriptInline("ctx._source = params.newQuote").
-			Lang("painless").
-			Param("newQuote", quote)
-
-		updatedQuote, err := esClient.
-			Update().
-			Index(ES_INDEX_NAME).
-			Id(quoteID).
-			Script(esScript).
-			Pretty(DEVELOPMENT).
-			Do(*ctx)
-		if err != nil {
-			log.Fatalln(err)
-		}
-
-		quote.Id = updatedQuote.Id
-		log.Println("[UPDATE] quote " + updatedQuote.Id)
+		_ = json.Unmarshal(readQuote.Source, &quote)
+		quote.Id = readQuote.Id
 
 		respondWithJSON(w, http.StatusOK, quote)
+	} else {
+		log.Println("[READ] quote not found" + quoteID)
 	}
 }
 
-func DeleteMovieQuote(ctx *context.Context, esClient *elastic.Client) func(w http.ResponseWriter, r *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		quoteID := vars["id"]
+func (s Server) UpdateMovieQuote(w http.ResponseWriter, r *http.Request) {
+	ctx := s.es.GetContext()
+	esClient := s.es.GetClient()
 
-		// Delete the document with the specified ID
-		_, err := esClient.
-			Delete().
-			Index(ES_INDEX_NAME).
-			Id(quoteID).
-			Pretty(DEVELOPMENT).
-			Do(*ctx)
-		if err != nil {
-			log.Fatalln(err)
-		}
+	vars := mux.Vars(r)
+	quoteID := vars["id"]
 
-		log.Println("[DELETE] quote " + quoteID)
+	var quote Quote
+	_ = json.NewDecoder(r.Body).Decode(&quote)
+
+	esScript := elastic.
+		NewScriptInline("ctx._source = params.newQuote").
+		Lang("painless").
+		Param("newQuote", quote)
+
+	updatedQuote, err := esClient.
+		Update().
+		Index(s.es.Config.IndexName).
+		Id(quoteID).
+		Script(esScript).
+		Pretty(s.Server.Development).
+		Do(*ctx)
+	if err != nil {
+		log.Fatalln(err)
 	}
+
+	quote.Id = updatedQuote.Id
+	log.Println("[UPDATE] quote " + updatedQuote.Id)
+
+	respondWithJSON(w, http.StatusOK, quote)
+}
+
+func (s Server) DeleteMovieQuote(w http.ResponseWriter, r *http.Request) {
+	ctx := s.es.GetContext()
+	esClient := s.es.GetClient()
+
+	vars := mux.Vars(r)
+	quoteID := vars["id"]
+
+	// Delete the document with the specified ID
+	_, err := esClient.
+		Delete().
+		Index(s.es.Config.IndexName).
+		Id(quoteID).
+		Pretty(s.Server.Development).
+		Do(*ctx)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Println("[DELETE] quote " + quoteID)
 }
