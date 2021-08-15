@@ -28,12 +28,14 @@
   },
   "homepage": "https://github.com/joaocarmo/goes#readme",
   "dependencies": {
-    "antd": "^4.16.6",
-    "parcel": "^2.0.0-beta.2",
+    "antd": "^4.16.11",
+    "parcel": "^2.0.0-rc.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "@parcel/transformer-sass": "2.0.0-beta.2"
+    "@babel/preset-react": "^7.14.5",
+    "@parcel/transformer-sass": "2.0.0-rc.0",
+    "@welldone-software/why-did-you-render": "^6.2.0"
   }
 }

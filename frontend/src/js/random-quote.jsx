@@ -1,4 +1,3 @@
-import React from 'react'
 import { Alert, Skeleton, Tag, Typography } from 'antd'
 import useElasticSearch from './useElasticSearch'
 import api from './api'

@@ -1,5 +1,7 @@
 FROM node:14-alpine
 
+RUN apk add --no-cache gcc g++ make python3
+
 WORKDIR /app
 
 COPY package.json yarn.lock ./

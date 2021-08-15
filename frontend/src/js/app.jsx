@@ -1,4 +1,3 @@
-import React from 'react'
 import { Space } from 'antd'
 import Template from './template'
 import RandomQuote from './random-quote'
