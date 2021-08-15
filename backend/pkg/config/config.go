@@ -31,25 +31,23 @@ const (
 		"number_of_replicas": 0
 	},
 	"mappings": {
-		"_doc": {
-			"properties": {
-				"quote": {
-					"type": "text",
-					"store": true,
-					"fielddata": true
-				},
-				"role": {
-					"type": "keyword"
-				},
-				"show": {
-					"type": "keyword"
-				},
-				"created": {
-					"type": "date"
-				},
-				"suggest_field": {
-					"type": "completion"
-				}
+		"properties": {
+			"quote": {
+				"type": "text",
+				"store": true,
+				"fielddata": true
+			},
+			"role": {
+				"type": "keyword"
+			},
+			"show": {
+				"type": "keyword"
+			},
+			"created": {
+				"type": "date"
+			},
+			"suggest_field": {
+				"type": "completion"
 			}
 		}
 	}

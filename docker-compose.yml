@@ -3,6 +3,7 @@ services:
   backend:
     build:
       context: ./backend
+    restart: always
     depends_on:
       - elasticsearch
     ports:
@@ -12,6 +13,7 @@ services:
     command: ["air"]
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+    restart: always
     ports:
       - 9200:9200
     environment:
@@ -20,6 +22,7 @@ services:
       - esdata:/usr/share/elasticsearch/data
   elasticsearch-admin:
     image: stephanediondev/elasticsearch-admin
+    restart: always
     depends_on:
       - elasticsearch
     ports:
@@ -30,6 +33,7 @@ services:
   frontend:
     build:
       context: ./frontend
+    restart: always
     depends_on:
       - backend
     ports:
