@@ -1,31 +1,28 @@
 import { useCallback, useEffect, useState } from 'react'
 
+const initialStatus = { data: null, error: null, loading: false }
+
 const useElasticSearch = (apiEndpoint, options) => {
-  const [data, setData] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [status, setStatus] = useState(initialStatus)
+  const { data, error, isLoading } = status
 
   const getData = useCallback(async (url, opts) => {
     try {
-      setIsLoading(true)
+      setStatus({ ...initialStatus, isLoading: true })
+
       const res = await fetch(url, opts)
       const { ok, status, statusText } = res
 
       if (ok) {
         const resData = await res.json()
-        setData(resData)
-        setError(null)
+        setStatus({ ...initialStatus, data: resData })
       } else {
-        setData(null)
-        setError({ status, statusText })
+        setStatus({ ...initialStatus, error: { status, statusText } })
       }
     } catch (err) {
-      setData(null)
-      setError(err)
-    } finally {
-      setIsLoading(false)
+      setStatus({ ...initialStatus, error: err })
     }
-  }, [setData, setError, setIsLoading])
+  }, [setStatus])
 
   useEffect(() => {
     getData(apiEndpoint, options)

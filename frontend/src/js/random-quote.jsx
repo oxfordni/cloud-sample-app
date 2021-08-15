@@ -4,11 +4,12 @@ import api from './api'
 
 const { Text } = Typography
 
+const minWidth = 512
+
 const RandomQuote = () => {
   const [data, isLoading, error] = useElasticSearch(api.getRandomQuote)
 
   if (error) {
-    console.log(error)
     return (
       <Alert
         message="ERROR"
@@ -23,7 +24,7 @@ const RandomQuote = () => {
         message="Random Quote"
         description={
           isLoading
-            ? <Skeleton active paragraph={{ width: 512 }} />
+            ? <Skeleton active paragraph={{ minWidth }} />
             : (
               <>
                 <p>
@@ -41,9 +42,12 @@ const RandomQuote = () => {
               </>
             )
           }
-        type="warning"
+      type="warning"
+      style={{ minWidth }}
       />
   )
 }
+
+RandomQuote.whyDidYouRender = true
 
 export default RandomQuote
