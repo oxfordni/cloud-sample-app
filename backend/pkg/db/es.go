@@ -3,6 +3,8 @@ package db
 import (
 	"context"
 	"log"
+	"math"
+	"time"
 
 	"github.com/joaocarmo/goes/pkg/config"
 
@@ -11,10 +13,12 @@ import (
 
 type ElasticSearch struct {
 	Config struct {
-		Server string
 		IndexName string
 		Mapping string
+		MaxRetries int
+		Server string
 	}
+	numRetries int
 	context *context.Context
 	client *elastic.Client
 }
@@ -22,9 +26,12 @@ type ElasticSearch struct {
 func New(config *config.Config) ElasticSearch {
 	es := ElasticSearch{}
 
-	es.Config.Server = config.ElasticSearch.Server
 	es.Config.IndexName = config.ElasticSearch.IndexName
 	es.Config.Mapping = config.ElasticSearch.Mapping
+	es.Config.MaxRetries = config.ElasticSearch.MaxRetries
+	es.Config.Server = config.ElasticSearch.Server
+
+	es.numRetries = 0
 
 	return es
 }
@@ -37,8 +44,8 @@ func (es ElasticSearch) GetClient() *elastic.Client {
 	return es.client
 }
 
-func (es ElasticSearch) Start() *ElasticSearch {
-	ctx := context.Background()
+func CreateClient(es ElasticSearch) (*elastic.Client, error) {
+	log.Printf("[ElasticSearch] Connecting to %s\n", es.Config.Server)
 
 	// Connect to the default Elasticsearch @ localhost:9200
 	client, err := elastic.NewClient(
@@ -46,7 +53,32 @@ func (es ElasticSearch) Start() *ElasticSearch {
 		elastic.SetRetrier(elastic.NewBackoffRetrier(&elastic.ExponentialBackoff{})),
 	)
 	if err != nil {
-		log.Fatalln(err)
+		// In case the initial attempt fails, we retry a predefined number of times
+		if es.numRetries >= es.Config.MaxRetries {
+			return nil, err
+		}
+
+		es.numRetries++
+		retryTime := int64(math.Pow(float64(2), float64(es.numRetries)))
+
+		log.Printf("[ElasticSearch] Couldn't connect - %s\n", err)
+		log.Printf("[ElasticSearch] Retrying in %ds...\n", retryTime)
+
+		time.Sleep(time.Second * time.Duration(retryTime))
+
+		return CreateClient(es)
+	}
+
+	return client, err
+}
+
+func (es ElasticSearch) Start() *ElasticSearch {
+	ctx := context.Background()
+
+	// Connect to the default Elasticsearch @ localhost:9200
+	client, err := CreateClient(es)
+	if err != nil {
+		log.Fatalf("[ElasticSearch] Couldn't connect - %s\n", err)
 	}
 
 	// Ping the Elasticsearch server

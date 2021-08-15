@@ -15,6 +15,7 @@ type Config struct {
 		Server string `default:"http://elasticsearch:9200" envconfig:"ELASTICSEARCH_SERVER"`
 		IndexName string `default:"quote" envconfig:"ELASTICSEARCH_INDEX_NAME"`
 		Mapping string `default:"{}" envconfig:"ELASTICSEARCH_MAPPING"`
+		MaxRetries int `default:"3" envconfig:"ELASTICSEARCH_MAX_RETRIES"`
 	}
 	External struct {
 		MovieQuotes string `default:"https://movie-quote-api.herokuapp.com/v1/quote/?format=json" envconfig:"EXTERNAL_MOVIE_QUOTES"`
