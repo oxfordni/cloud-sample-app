@@ -36,6 +36,7 @@ services:
     restart: always
     depends_on:
       - backend
+      - elasticsearch
     ports:
       - 3001:3001
     volumes:
