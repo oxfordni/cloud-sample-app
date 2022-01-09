@@ -21,8 +21,7 @@ const Template = ({ children }) => (
     </Content>
     <Footer>
       <Text>
-        Created by
-        {' '}
+        {'Created by '}
         <Link
           href="https://joaocarmo.com"
           target="_blank"

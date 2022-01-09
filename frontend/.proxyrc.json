@@ -1,8 +1,8 @@
 {
-  "/api": {
-    "target": "http://backend:3000/api/",
+  "/api/v1/quotes": {
+    "target": "http://backend-go:3000/api/v1",
     "pathRewrite": {
-      "^/api": ""
+      "^/api/v1/quotes": ""
     }
   }
 }

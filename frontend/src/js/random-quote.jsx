@@ -20,31 +20,29 @@ const RandomQuote = () => {
   }
 
   return (
-      <Alert
-        message="Random Quote"
-        description={
-          isLoading
-            ? <Skeleton active paragraph={{ minWidth }} />
-            : (
-              <>
-                <p>
-                  <q>{data?.quote}</q>
-                </p>
-                <p>
-                  <cite>— {data?.role}</cite>
-                </p>
-                <div>
-                  <Tag color="volcano">{data?.show}</Tag>
-                  {data?.contain_adult_lang && (
-                    <Tag color="magenta">Adult</Tag>
-                  )}
-                </div>
-              </>
-            )
-          }
+    <Alert
+      message="Random Quote"
+      description={
+        isLoading ? (
+          <Skeleton active paragraph={{ minWidth }} />
+        ) : (
+          <>
+            <p>
+              <q>{data?.quote}</q>
+            </p>
+            <p>
+              <cite>— {data?.role}</cite>
+            </p>
+            <div>
+              <Tag color="volcano">{data?.show}</Tag>
+              {data?.contain_adult_lang && <Tag color="magenta">Adult</Tag>}
+            </div>
+          </>
+        )
+      }
       type="warning"
       style={{ minWidth }}
-      />
+    />
   )
 }
 

@@ -10,6 +10,8 @@
   },
   "scripts": {
     "build": "parcel build src/index.html",
+    "pretty:fix": "prettier --write .",
+    "pretty": "prettier --check .",
     "start": "parcel src/index.html --port 3001 --hmr-port 3001",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -28,14 +30,15 @@
   },
   "homepage": "https://github.com/joaocarmo/goes#readme",
   "dependencies": {
-    "antd": "^4.16.11",
-    "parcel": "^2.0.0-rc.0",
+    "antd": "^4.18.2",
+    "parcel": "^2.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.14.5",
-    "@parcel/transformer-sass": "2.0.0-rc.0",
-    "@welldone-software/why-did-you-render": "^6.2.0"
+    "@babel/preset-react": "^7.16.7",
+    "@parcel/transformer-sass": "2.1.1",
+    "@welldone-software/why-did-you-render": "^6.2.3",
+    "prettier": "^2.5.1"
   }
 }

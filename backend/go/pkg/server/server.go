@@ -14,10 +14,10 @@ import (
 type Server struct {
 	Server struct {
 		Development bool
-		Port int
+		Port        int
 	}
 	App struct {
-		Name string
+		Name       string
 		MaxResults int
 		ApiVersion string
 	}
@@ -49,6 +49,7 @@ func (s Server) Start(es *db.ElasticSearch) error {
 	quoteEndpoint := fmt.Sprintf("%s/movie-quote", apiPrefix)
 
 	router.HandleFunc("/", IndexHandler)
+	router.HandleFunc("/health", HealthHandler)
 	router.HandleFunc(fmt.Sprintf("%s/movie-quotes", apiPrefix), s.GetMovieQuote).Methods("GET")
 	router.HandleFunc(quoteEndpoint, s.CreateMovieQuote).Methods("POST")
 	router.HandleFunc(quoteEndpoint, s.ReadMovieQuoteAll).Methods("GET")
