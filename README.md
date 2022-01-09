@@ -18,6 +18,16 @@ The ElasticSearch Admin is reachable on port `8080` and the secret is `goes`.
 
 ## API
 
+### Quotes
+
+The quotes microservice is reachable on port `3000`.
+
+Check the `alive` status.
+
+```txt
+GET /health
+```
+
 Get a random movie / series quote from [F4R4N's movie-quote][f4r4n-movie-quote].
 
 ```txt
@@ -38,10 +48,10 @@ Payload signature.
 
 ```json
 {
-	"quote": "Ask Yourself, Who Writes The Books? Who Chooses What We Remember And What Gets Forgotten",
-	"role": "Ethelrida Smutney",
-	"show": "Fargo S04",
-	"contain_adult_lang": false
+  "quote": "Ask Yourself, Who Writes The Books? Who Chooses What We Remember And What Gets Forgotten",
+  "role": "Ethelrida Smutney",
+  "show": "Fargo S04",
+  "contain_adult_lang": false
 }
 ```
 
