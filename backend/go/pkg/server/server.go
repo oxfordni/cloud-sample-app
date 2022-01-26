@@ -5,9 +5,12 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/joaocarmo/goes/pkg/config"
 	"github.com/joaocarmo/goes/pkg/db"
 
+	swagger "github.com/davidebianchi/gswagger"
+	"github.com/davidebianchi/gswagger/apirouter"
 	"github.com/gorilla/mux"
 )
 
@@ -43,21 +46,45 @@ func New(config *config.Config) Server {
 func (s Server) Start(es *db.ElasticSearch) error {
 	s.es = es
 
-	router := mux.NewRouter().StrictSlash(true)
+	context := *s.es.GetContext()
+	muxRouter := mux.NewRouter().StrictSlash(true)
+	router, err := swagger.NewRouter(apirouter.NewGorillaMuxRouter(muxRouter), swagger.Options{
+		Context: context,
+		Openapi: &openapi3.T{
+			Info: &openapi3.Info{
+				Title:   "goes",
+				Version: "1.0.0",
+			},
+		},
+	})
+
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	apiPrefix := fmt.Sprintf("/api/%s", s.App.ApiVersion)
 	quoteEndpoint := fmt.Sprintf("%s/movie-quote", apiPrefix)
 
-	router.HandleFunc("/", IndexHandler)
-	router.HandleFunc("/health", HealthHandler)
-	router.HandleFunc(fmt.Sprintf("%s/movie-quotes", apiPrefix), s.GetMovieQuote).Methods("GET")
-	router.HandleFunc(quoteEndpoint, s.CreateMovieQuote).Methods("POST")
-	router.HandleFunc(quoteEndpoint, s.ReadMovieQuoteAll).Methods("GET")
-	router.HandleFunc(fmt.Sprintf("%s/{id}", quoteEndpoint), s.ReadMovieQuote).Methods("GET")
-	router.HandleFunc(fmt.Sprintf("%s/{id}", quoteEndpoint), s.UpdateMovieQuote).Methods("PUT")
-	router.HandleFunc(fmt.Sprintf("%s/{id}", quoteEndpoint), s.DeleteMovieQuote).Methods("DELETE")
+	// Serve a basic index page
+	muxRouter.HandleFunc("/", IndexHandler)
+	// Health check
+	router.AddRoute(http.MethodGet, "/health", HealthHandler, HealthHandlerDefinition)
+	// API
+	router.AddRoute(http.MethodGet, fmt.Sprintf("%s/movie-quotes", apiPrefix), s.GetMovieQuote, MovieQuotesHandlerDefinition)
+	router.AddRoute(http.MethodPost, quoteEndpoint, s.CreateMovieQuote, PostQuoteHandlerDefinition)
+	router.AddRoute(http.MethodGet, quoteEndpoint, s.ReadMovieQuoteAll, GetAllQuoteHandlerDefinition)
+	router.AddRoute(http.MethodGet, fmt.Sprintf("%s/{id}", quoteEndpoint), s.ReadMovieQuote, GetQuoteHandlerDefinition)
+	router.AddRoute(http.MethodPut, fmt.Sprintf("%s/{id}", quoteEndpoint), s.UpdateMovieQuote, PutQuoteHandlerDefinition)
+	router.AddRoute(http.MethodDelete, fmt.Sprintf("%s/{id}", quoteEndpoint), s.DeleteMovieQuote, DeleteQuoteHandlerDefinition)
+
+	err = router.GenerateAndExposeSwagger()
+
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	log.Printf("Listening on port %d...\n", s.Server.Port)
+	log.Printf("OpenAPI specification available at %s\n", swagger.DefaultYAMLDocumentationPath)
 
-	return http.ListenAndServe(fmt.Sprintf(":%d", s.Server.Port), router)
+	return http.ListenAndServe(fmt.Sprintf(":%d", s.Server.Port), muxRouter)
 }

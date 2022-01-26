@@ -213,4 +213,6 @@ func (s Server) DeleteMovieQuote(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Println("[DELETE] quote " + quoteID)
+
+	okHandler(w, r)
 }

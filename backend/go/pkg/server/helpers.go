@@ -12,3 +12,8 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.WriteHeader(code)
 	w.Write(response)
 }
+
+func okHandler(w http.ResponseWriter, req *http.Request) {
+	w.WriteHeader(http.StatusNoContent)
+	w.Write([]byte(""))
+}
