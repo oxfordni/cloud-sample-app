@@ -6,21 +6,21 @@ It goes! (go+es)
 
 ```sh
 # Start the containers
-docker compose up -d
+docker compose up -d --build
 
 # Stop the containers
-docker compose down -v
+docker compose down
 ```
 
-The app will be exposed on the port `3001`.
+The app UI will be exposed on the port `3001`.
 
-The ElasticSearch Admin is reachable on port `8080` and the secret is `goes`.
+The ElasticSearch Admin is available on port `8080` and the secret is `goes`.
 
 ## API
 
 ### Quotes
 
-The quotes microservice is reachable on port `3000`.
+The quotes microservice is available on port `3000`.
 
 Check the `alive` status.
 
@@ -55,6 +55,9 @@ Payload signature.
 }
 ```
 
+The full API Specification is available on [/documentation/yaml][api-spec].
+
 <!-- References -->
 
+[api-spec]: http://localhost:3000/documentation/yaml
 [f4r4n-movie-quote]: https://github.com/F4R4N/movie-quote
