@@ -82,6 +82,17 @@ PUT /api/v1/users/{id}/
 DELETE /api/v1/users/{id}/
 ```
 
+Payload signature.
+
+```json
+{
+  "url": "http://localhost:3001/api/v1/users/1/",
+  "username": "admin",
+  "email": "admin@example.com",
+  "groups": []
+}
+```
+
 CRUD for groups.
 
 ```txt
@@ -90,6 +101,15 @@ POST /api/v1/groups/
 GET /api/v1/groups/{id}/
 PUT /api/v1/groups/{id}/
 DELETE /api/v1/groups/{id}/
+```
+
+Payload signature.
+
+```json
+{
+  "url": "http://localhost:3001/api/v1/groups/1/",
+  "name": "pub"
+}
 ```
 
 The full API Specification is available on [localhost:8000/documentation][api-py-spec].
