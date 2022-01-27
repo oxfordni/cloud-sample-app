@@ -1,4 +1,16 @@
 {
+  "/go": {
+    "target": "http://backend-go:3000",
+    "pathRewrite": {
+      "^/go": ""
+    }
+  },
+  "/py": {
+    "target": "http://backend-py:3000",
+    "pathRewrite": {
+      "^/go": ""
+    }
+  },
   "/api/v1/quotes": {
     "target": "http://backend-go:3000/api/v1",
     "pathRewrite": {

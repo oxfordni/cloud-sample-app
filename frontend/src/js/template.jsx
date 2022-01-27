@@ -1,4 +1,6 @@
-import { Layout, Typography } from 'antd'
+import { Row, Col, Layout, Typography } from 'antd'
+import BackendStatus from './backend-status'
+import pkg from '../../package.json'
 
 const { Header, Footer, Sider, Content } = Layout
 const { Text, Title, Link } = Typography
@@ -6,7 +8,14 @@ const { Text, Title, Link } = Typography
 const Template = ({ children }) => (
   <Layout style={{ minHeight: '100vh' }}>
     <Header>
-      <Title type="warning">go+es</Title>
+      <Row align="middle" justify="space-between">
+        <Col span={12}>
+          <Title type="warning">{pkg.title}</Title>
+        </Col>
+        <Col span={12}>
+          <BackendStatus />
+        </Col>
+      </Row>
     </Header>
     <Content
       style={{
@@ -22,12 +31,8 @@ const Template = ({ children }) => (
     <Footer>
       <Text>
         {'Created by '}
-        <Link
-          href="https://joaocarmo.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          João Carmo
+        <Link href={pkg.author.url} target="_blank" rel="noopener noreferrer">
+          {pkg.author.name}
         </Link>
       </Text>
     </Footer>

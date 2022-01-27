@@ -1,5 +1,6 @@
 {
   "name": "goes",
+  "title": "go+es",
   "version": "1.0.0",
   "description": "go+es",
   "goes": "src/index.html",
@@ -23,7 +24,10 @@
     "go",
     "elasticsearch"
   ],
-  "author": "João Carmo",
+  "author": {
+    "name": "João Carmo",
+    "url": "https://joaocarmo.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/joaocarmo/goes/issues"

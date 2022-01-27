@@ -1,5 +1,5 @@
 import { Alert, Skeleton, Tag, Typography } from 'antd'
-import useElasticSearch from './useElasticSearch'
+import useAPI from './useAPI'
 import api from './api'
 
 const { Text } = Typography
@@ -7,7 +7,7 @@ const { Text } = Typography
 const minWidth = 512
 
 const RandomQuote = () => {
-  const [data, isLoading, error] = useElasticSearch(api.getRandomQuote)
+  const [data, isLoading, error] = useAPI(api.getRandomQuote)
 
   if (error) {
     return (

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 const initialStatus = { data: null, error: null, loading: false }
 
-const useElasticSearch = (apiEndpoint, options) => {
+const useAPI = (apiEndpoint, options) => {
   const [status, setStatus] = useState(initialStatus)
   const { data, error, isLoading } = status
 
@@ -34,4 +34,4 @@ const useElasticSearch = (apiEndpoint, options) => {
   return [data, isLoading, error]
 }
 
-export default useElasticSearch
+export default useAPI
