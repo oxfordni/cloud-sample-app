@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
+from rest_framework.schemas import get_schema_view
+from . import api
 from . import views
 
 
@@ -26,7 +28,14 @@ router.register(r'groups', views.GroupViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', api.index),
+    path('health', api.health),
+    path('api/v1/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
+    path('documentation/', get_schema_view(
+        title="goes in Python",
+        description="A simple API for users and groups",
+        version="1.0.0"
+    ), name='documentation'),
 ]

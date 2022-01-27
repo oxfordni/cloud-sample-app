@@ -5,14 +5,16 @@ It goes! (go+es)
 ## Development
 
 ```sh
-# Start the containers
+# Build and start the containers
 docker compose up -d --build
 
 # Stop the containers
 docker compose down
 ```
 
-The app UI will be exposed on the port `3001`.
+The app will be exposed on the port `3001`.
+
+## ElasticSearch
 
 The ElasticSearch Admin is available on port `8080` and the secret is `goes`.
 
@@ -20,28 +22,26 @@ The ElasticSearch Admin is available on port `8080` and the secret is `goes`.
 
 ### Quotes
 
-The quotes microservice is available on port `3000`.
-
 Check the `alive` status.
 
 ```txt
-GET /health
+GET /go/health
 ```
 
 Get a random movie / series quote from [F4R4N's movie-quote][f4r4n-movie-quote].
 
 ```txt
-GET /api/v1/movie-quotes
+GET /api/v1/quotes/movie-quotes
 ```
 
 CRUD for quotes.
 
 ```txt
-POST /api/v1/movie-quote
-GET /api/v1/movie-quote
-GET /api/v1/movie-quote/{id}
-PUT /api/v1/movie-quote/{id}
-DELETE /api/v1/movie-quote/{id}
+GET /api/v1/quotes/movie-quote
+POST /api/v1/quotes/movie-quote
+GET /api/v1/quotes/movie-quote/{id}
+PUT /api/v1/quotes/movie-quote/{id}
+DELETE /api/v1/quotes/movie-quote/{id}
 ```
 
 Payload signature.
@@ -55,9 +55,47 @@ Payload signature.
 }
 ```
 
-The full API Specification is available on [/documentation/yaml][api-spec].
+The full API Specification is available on [localhost:3000/documentation/yaml][api-go-spec].
+
+### Users & Groups
+
+If required, the username and password for the `admin` user are:
+
+```txt
+username: admin
+password: admin
+```
+
+Check the `alive` status.
+
+```txt
+GET /py/health
+```
+
+CRUD for users.
+
+```txt
+GET /api/v1/users/
+POST /api/v1/users/
+GET /api/v1/users/{id}/
+PUT /api/v1/users/{id}/
+DELETE /api/v1/users/{id}/
+```
+
+CRUD for groups.
+
+```txt
+GET /api/v1/groups/
+POST /api/v1/groups/
+GET /api/v1/groups/{id}/
+PUT /api/v1/groups/{id}/
+DELETE /api/v1/groups/{id}/
+```
+
+The full API Specification is available on [localhost:8000/documentation][api-py-spec].
 
 <!-- References -->
 
-[api-spec]: http://localhost:3000/documentation/yaml
+[api-go-spec]: http://localhost:3000/documentation/yaml
+[api-py-spec]: http://localhost:8000/documentation
 [f4r4n-movie-quote]: https://github.com/F4R4N/movie-quote

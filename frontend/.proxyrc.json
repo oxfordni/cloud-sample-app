@@ -8,7 +8,7 @@
   "/py": {
     "target": "http://backend-py:8000",
     "pathRewrite": {
-      "^/go": ""
+      "^/py": ""
     }
   },
   "/api/v1/quotes": {
@@ -16,5 +16,11 @@
     "pathRewrite": {
       "^/api/v1/quotes": ""
     }
+  },
+  "/api/v1/users": {
+    "target": "http://backend-py:8000"
+  },
+  "/api/v1/groups": {
+    "target": "http://backend-py:8000"
   }
 }

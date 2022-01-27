@@ -52,8 +52,9 @@ func (s Server) Start(es *db.ElasticSearch) error {
 		Context: context,
 		Openapi: &openapi3.T{
 			Info: &openapi3.Info{
-				Title:   "goes",
-				Version: "1.0.0",
+				Title:				"goes in go",
+				Description:	"A simple API for movies quotes",
+				Version:			"1.0.0",
 			},
 		},
 	})
