@@ -6,7 +6,7 @@
     }
   },
   "/py": {
-    "target": "http://backend-py:3000",
+    "target": "http://backend-py:8000",
     "pathRewrite": {
       "^/go": ""
     }
