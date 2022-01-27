@@ -12,10 +12,7 @@
     }
   },
   "/api/v1/quotes": {
-    "target": "http://backend-go:3000/api/v1",
-    "pathRewrite": {
-      "^/api/v1/quotes": ""
-    }
+    "target": "http://backend-go:3000"
   },
   "/api/v1/users": {
     "target": "http://backend-py:8000"

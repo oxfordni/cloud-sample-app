@@ -64,14 +64,14 @@ func (s Server) Start(es *db.ElasticSearch) error {
 	}
 
 	apiPrefix := fmt.Sprintf("/api/%s", s.App.ApiVersion)
-	quoteEndpoint := fmt.Sprintf("%s/movie-quote", apiPrefix)
+	quoteEndpoint := fmt.Sprintf("%s/quotes", apiPrefix)
 
 	// Serve a basic index page
 	muxRouter.HandleFunc("/", IndexHandler)
 	// Health check
 	router.AddRoute(http.MethodGet, "/health", HealthHandler, HealthHandlerDefinition)
 	// API
-	router.AddRoute(http.MethodGet, fmt.Sprintf("%s/movie-quotes", apiPrefix), s.GetMovieQuote, MovieQuotesHandlerDefinition)
+	router.AddRoute(http.MethodGet, fmt.Sprintf("%s/random", quoteEndpoint), s.GetMovieQuote, MovieQuotesHandlerDefinition)
 	router.AddRoute(http.MethodPost, quoteEndpoint, s.CreateMovieQuote, PostQuoteHandlerDefinition)
 	router.AddRoute(http.MethodGet, quoteEndpoint, s.ReadMovieQuoteAll, GetAllQuoteHandlerDefinition)
 	router.AddRoute(http.MethodGet, fmt.Sprintf("%s/{id}", quoteEndpoint), s.ReadMovieQuote, GetQuoteHandlerDefinition)

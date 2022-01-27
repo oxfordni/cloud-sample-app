@@ -5,7 +5,7 @@ export const apiPrefix = '/api/v1'
 const api = {
   backendGoStatus: `${goPrefix}/health`,
   backendPyStatus: `${pyPrefix}/health`,
-  getRandomQuote: `${apiPrefix}/quotes/movie-quotes`,
+  getRandomQuote: `${apiPrefix}/quotes/random`,
 }
 
 export default api

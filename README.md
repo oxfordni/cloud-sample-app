@@ -31,17 +31,17 @@ GET /go/health
 Get a random movie / series quote from [F4R4N's movie-quote][f4r4n-movie-quote].
 
 ```txt
-GET /api/v1/quotes/movie-quotes
+GET /api/v1/quotes/random
 ```
 
 CRUD for quotes.
 
 ```txt
-GET /api/v1/quotes/movie-quote
-POST /api/v1/quotes/movie-quote
-GET /api/v1/quotes/movie-quote/{id}
-PUT /api/v1/quotes/movie-quote/{id}
-DELETE /api/v1/quotes/movie-quote/{id}
+GET /api/v1/quotes
+POST /api/v1/quotes
+GET /api/v1/quotes/{id}
+PUT /api/v1/quotes/{id}
+DELETE /api/v1/quotes/{id}
 ```
 
 Payload signature.
