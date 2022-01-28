@@ -18,21 +18,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joaocarmo/goes.git"
+    "url": "git+https://github.com/oxfordni/cloud-sample-app.git"
   },
   "keywords": [
     "go",
     "elasticsearch"
   ],
   "author": {
-    "name": "João Carmo",
-    "url": "https://joaocarmo.com"
+    "name": "ONI",
+    "url": "https://oni.bio/"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/joaocarmo/goes/issues"
+    "url": "https://github.com/oxfordni/cloud-sample-app/issues"
   },
-  "homepage": "https://github.com/joaocarmo/goes#readme",
+  "homepage": "https://github.com/oxfordni/cloud-sample-app#readme",
   "dependencies": {
     "antd": "^4.18.5",
     "parcel": "^2.2.1",
