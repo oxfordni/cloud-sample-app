@@ -4,11 +4,14 @@ It goes! (go+es)
 
 ## Development
 
+If you have [Docker][docker] installed on your machine, starting up the app is
+as simple as executing the following commands.
+
 ```sh
 # Build and start the containers
 docker compose up -d --build
 
-# Stop the containers
+# Stop the containers, when you're done
 docker compose down
 ```
 
@@ -49,5 +52,6 @@ and the [Testing Technical Challenge][challenge].
 <!-- References -->
 
 [api]: ./docs/API.md
-[docs]: ./docs/README.md
 [challenge]: ./docs/TESTING_CHALLENGE.md
+[docker]: https://www.docker.com/
+[docs]: ./docs/README.md

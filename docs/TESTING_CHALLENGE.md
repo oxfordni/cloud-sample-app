@@ -7,6 +7,12 @@ To be successful, we need to write more tests so we can make sure our code is
 working as expected. This will help us deliver a better product and our users
 will be happy.
 
+## Setup
+
+The setup should be relatively simple. All you need to do is to have [git][git]
+and [Docker][docker] installed on your machine and follow the steps on the main
+[README][development] file.
+
 ## Requirements
 
 Feel free to use any language you like as well as any framework you are familiar
@@ -19,7 +25,12 @@ already familar to the team. You can find our recommendations below.
 
 ### What we expect to see
 
-For this challenge, we expect you to:
+For this challenge, we expect you to complete some testing tasks. Below you will
+find some examples of what these could be. You don't have to complete all, but
+use them as a starting point.
+
+Focus on quality rather than quantity! And don't spend an entire day on this. A
+few hours is enough.
 
 - Add some more unit tests to our go and python backends and the frontend
   - You can intercept/mock the network requests
@@ -77,6 +88,10 @@ automate the testing process.
 
 [circleci]: https://circleci.com/
 [cypress]: https://www.cypress.io/
+[development]: ../README.md#development
+[docker]: https://www.docker.com/
+[gh-actions]: https://docs.github.com/en/actions
+[git]: https://git-scm.com/
 [go]: https://golang.org/pkg/testing/
 [jest]: https://jestjs.io/
 [postman]: https://www.getpostman.com/
@@ -84,4 +99,3 @@ automate the testing process.
 [testing-library]: https://testing-library.com/
 [unit]: ../README.md#tests
 [unittest]: https://docs.python.org/3/library/unittest.html
-[gh-actions]: https://docs.github.com/en/actions
