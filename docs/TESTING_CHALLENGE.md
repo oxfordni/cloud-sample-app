@@ -50,7 +50,7 @@ For this challenge, we expect you to:
 Our frontend tests are written using the [Jest][jest] testing framework.
 
 For testing the [React][react] components, we use the
-[testing library][testing-library] framework. Even thou we haven't written any
+[testing library][testing-library] framework. Even though we haven't written any
 component tests yet, the framework is already installed and set up.
 
 #### Backend
