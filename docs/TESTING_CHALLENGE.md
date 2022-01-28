@@ -58,7 +58,7 @@ few hours is enough.
 
 #### Frontend
 
-Our frontend tests are written using the [Jest][jest] testing framework.
+Our frontend tests use the [Jest][jest] testing framework.
 
 For testing the [React][react] components, we use the
 [testing library][testing-library] framework. Even though we haven't written any
@@ -66,10 +66,9 @@ component tests yet, the framework is already installed and set up.
 
 #### Backend
 
-Our Go backend tests written using the native [Go testing framework][go].
+Our Go backend tests use the native [Go testing framework][go].
 
-Our Python backend tests are written using the native [unittest][unittest]
-testing framework.
+Our Python backend tests use the native [unittest][unittest] testing framework.
 
 ### API Tests
 
