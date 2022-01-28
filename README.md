@@ -5,7 +5,7 @@ It goes! (go+es)
 ## Development
 
 If you have [Docker][docker] installed on your machine, starting up the app is
-as simple as executing the following commands.
+as simple as executing the following commands, after cloning this repo.
 
 ```sh
 # Build and start the containers
