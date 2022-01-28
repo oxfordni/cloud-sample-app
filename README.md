@@ -116,7 +116,7 @@ The full API Specification is available on [localhost:8000/documentation][api-py
 
 ## Tests
 
-Basic unit tests are available as starting point.
+Basic unit tests are available as a starting point.
 
 ### Frontend
 
