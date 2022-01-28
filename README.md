@@ -114,6 +114,29 @@ Payload signature.
 
 The full API Specification is available on [localhost:8000/documentation][api-py-spec].
 
+## Tests
+
+Basic unit tests are available as starting point.
+
+### Frontend
+
+```sh
+# Run the tests while the app is running
+docker exec -it frontend yarn test
+```
+
+### Backend
+
+```sh
+# Run the go tests while the app is running
+docker exec -it backend-go go test -run="" ./pkg/...
+```
+
+```sh
+# Run the Python tests while the app is running
+docker exec -it backend-py python manage.py test
+```
+
 <!-- References -->
 
 [api-go-spec]: http://localhost:3000/documentation/yaml

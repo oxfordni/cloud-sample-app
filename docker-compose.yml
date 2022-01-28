@@ -13,7 +13,7 @@ services:
       - 3001:3001
     volumes:
       - ./frontend:/app
-      - node_modules:/app/node_modules
+      - /app/node_modules
       - parcel_cache:/app/.parcel-cache
       - yarn_cache:/usr/local/share/.cache/yarn/v6
     command: ["yarn", "start"]
@@ -63,6 +63,5 @@ services:
 
 volumes:
   esdata:
-  node_modules:
   parcel_cache:
   yarn_cache:

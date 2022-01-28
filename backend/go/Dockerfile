@@ -2,6 +2,8 @@ FROM golang:1.17-alpine AS worker
 
 WORKDIR /app
 
+ENV CGO_ENABLED 0
+
 # We need curl to be installed
 RUN apk --no-cache add curl
 
