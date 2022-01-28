@@ -57,8 +57,8 @@ component tests yet, the framework is already installed and set up.
 
 Our Go backend tests written using the native [Go testing framework][go].
 
-Our Python backend tests are written using the native [unittest][py] testing
-framework.
+Our Python backend tests are written using the native [unittest][unittest]
+testing framework.
 
 ### API Tests
 
