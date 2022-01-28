@@ -14,7 +14,7 @@
     "pretty:fix": "prettier --write .",
     "pretty": "prettier --check .",
     "start": "parcel src/index.html --port 3001 --hmr-port 3001",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -40,9 +40,17 @@
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.12",
+    "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
     "@parcel/transformer-sass": "2.2.1",
+    "@testing-library/dom": "^8.11.3",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
     "@welldone-software/why-did-you-render": "^6.2.3",
+    "babel-jest": "^27.4.6",
+    "jest": "^27.4.7",
     "prettier": "^2.5.1"
   }
 }
