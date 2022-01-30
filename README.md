@@ -24,7 +24,7 @@ Basic unit tests are available as a starting point.
 ### Frontend
 
 ```sh
-# Run the tests while the app is running
+# Run the frontend tests while the app is running
 docker exec -it frontend yarn test
 ```
 
