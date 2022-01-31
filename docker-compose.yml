@@ -7,7 +7,8 @@ services:
     container_name: frontend
     restart: unless-stopped
     depends_on:
-      - backend
+      - backend-go
+      - backend-py
       - elasticsearch
     ports:
       - 3001:3001
