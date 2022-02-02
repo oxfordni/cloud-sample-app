@@ -39,7 +39,7 @@ services:
       - 8000:8000
     volumes:
       - ./backend/python:/app
-    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    command: ["./docker-entrypoint.sh"]
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.16.3
     container_name: elasticsearch

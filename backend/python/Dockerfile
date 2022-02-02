@@ -15,8 +15,6 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-RUN python manage.py migrate
-
-RUN python manage.py createsuperuser --noinput || true
+RUN chmod +x docker-entrypoint.sh
 
 EXPOSE 8000

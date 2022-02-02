@@ -9,7 +9,7 @@ COPY package.json yarn.lock ./
 RUN yarn --frozen-lockfile
 
 # Use npm modules with binaries
-ENV PATH /opt/mypc/node_modules/.bin:$PATH
+ENV PATH /app/node_modules/.bin:$PATH
 
 COPY . .
 
