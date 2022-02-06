@@ -26,6 +26,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build the stack
         run: docker compose up -d --build
+      - name: Test Frontend
+        run: docker exec frontend yarn test
       - name: Stop stack
         run: docker compose down
       
