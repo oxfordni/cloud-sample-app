@@ -28,6 +28,10 @@ jobs:
         run: docker compose up -d --build
       - name: Test Frontend
         run: docker exec frontend yarn test
+      - name: Test py backend
+        run: docker exec backend-py python manage.py test
+      - name: Test go backend
+        run: docker exec backend-go go test -run="" ./pkg/...
       - name: Stop stack
         run: docker compose down
       
