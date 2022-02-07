@@ -1,0 +1,228 @@
+{
+	"id": "fde0db7c-9c5d-4388-b7e0-c8444fa448d2",
+	"name": "oni_quotes_api_tests",
+	"timestamp": "2022-02-05T22:39:47.790Z",
+	"collection_id": "0-3ff2b189-816a-4a17-b418-e1c46b747665",
+	"folder_id": 0,
+	"environment_id": "62620880-17a7-4550-b024-f117dbf0f2af",
+	"totalPass": 9,
+	"totalFail": 1,
+	"results": [
+		{
+			"id": "8137b30a-50af-4226-926b-a59d46d6a063",
+			"name": "go-service-health-check",
+			"url": "http://localhost:3000/health",
+			"time": 21,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Health ok": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Health ok": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				21
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Health ok": true
+				}
+			]
+		},
+		{
+			"id": "07c66041-15fe-483c-8361-33b7c84de9f5",
+			"name": "Get random qoute",
+			"url": "http://localhost:3000/api/v1/quotes/random",
+			"time": 171,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				171
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "8f5e0461-f60d-4448-9eb5-cb125b595ae8",
+			"name": "TC05-Create a new quote",
+			"url": "http://localhost:3000/api/v1/quotes",
+			"time": 1302,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200 ": true,
+				"Store id": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200 ": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Store id": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				1302
+			],
+			"allTests": [
+				{
+					"Status code is 200 ": true,
+					"Store id": true
+				}
+			]
+		},
+		{
+			"id": "108bf269-625a-4646-8816-7130710e15b3",
+			"name": "TC06-List quotes",
+			"url": "http://localhost:3000/api/v1/quotes/",
+			"time": 479,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Verify id from the response": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Verify id from the response": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				479
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Verify id from the response": true
+				}
+			]
+		},
+		{
+			"id": "03261cd8-4aa7-4269-ab6a-b966cf026841",
+			"name": "TC07-Update quotes",
+			"url": "http://localhost:3000/api/v1/quotes/_goLzH4BsKKdXe56Lyt6",
+			"time": 598,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Compare the quotes": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Compare the quotes": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				598
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Compare the quotes": true
+				}
+			]
+		},
+		{
+			"id": "2c641967-f778-4d9c-8fcc-25891ca8141d",
+			"name": "TC09-Delete quotes",
+			"url": "http://localhost:3000/api/v1/quotes/_goLzH4BsKKdXe56Lyt6",
+			"time": 18,
+			"responseCode": {
+				"code": 204,
+				"name": "No Content"
+			},
+			"tests": {
+				"Status code is 201": false
+			},
+			"testPassFailCounts": {
+				"Status code is 201": {
+					"pass": 0,
+					"fail": 1
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Status code is 201": false
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 2589,
+	"collection": {
+		"requests": [
+			{
+				"id": "8137b30a-50af-4226-926b-a59d46d6a063",
+				"method": "GET"
+			},
+			{
+				"id": "07c66041-15fe-483c-8361-33b7c84de9f5",
+				"method": "GET"
+			},
+			{
+				"id": "8f5e0461-f60d-4448-9eb5-cb125b595ae8",
+				"method": "POST"
+			},
+			{
+				"id": "108bf269-625a-4646-8816-7130710e15b3",
+				"method": "GET"
+			},
+			{
+				"id": "03261cd8-4aa7-4269-ab6a-b966cf026841",
+				"method": "PUT"
+			},
+			{
+				"id": "2c641967-f778-4d9c-8fcc-25891ca8141d",
+				"method": "DELETE"
+			}
+		]
+	}
+}
