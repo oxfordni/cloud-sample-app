@@ -1,0 +1,9 @@
+{
+  "extends": "./cypress.json",
+  "backendBaseURL": "http://localhost:8080/api/v2",
+  "baseUrl": "http://localhost:3001/",
+  "env": {
+    "userId": "123",
+    "environment": "qa"
+  }
+}

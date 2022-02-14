@@ -1,0 +1,7 @@
+{
+  "baseUrl": "https://demo.1crmcloud.com/",
+  "env": {
+    "userId": "123",
+    "environment": "prod"
+  }
+}
