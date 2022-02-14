@@ -1,0 +1,6 @@
+{
+  "env": {
+    "userId": "123",
+    "environment": "prod"
+  }
+}
