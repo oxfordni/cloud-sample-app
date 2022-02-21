@@ -8,5 +8,4 @@ tc2=unittest.TestLoader().loadTestsFromTestCase(Test_pyService)
 tc3=unittest.TestLoader().loadTestsFromTestCase(Test_goService)
 
 EndtoendTestSuite=unittest.TestSuite([tc1,tc2,tc3])
-
 unittest.TextTestRunner().run(EndtoendTestSuite)

@@ -1,7 +1,7 @@
 {
-	"id": "fde0db7c-9c5d-4388-b7e0-c8444fa448d2",
+	"id": "c06b6f0b-3c71-4100-aad3-5ed8c8f9019a",
 	"name": "oni_quotes_api_tests",
-	"timestamp": "2022-02-05T22:39:47.790Z",
+	"timestamp": "2022-02-21T11:14:10.208Z",
 	"collection_id": "0-3ff2b189-816a-4a17-b418-e1c46b747665",
 	"folder_id": 0,
 	"environment_id": "62620880-17a7-4550-b024-f117dbf0f2af",
@@ -12,7 +12,7 @@
 			"id": "8137b30a-50af-4226-926b-a59d46d6a063",
 			"name": "go-service-health-check",
 			"url": "http://localhost:3000/health",
-			"time": 21,
+			"time": 86,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -32,7 +32,7 @@
 				}
 			},
 			"times": [
-				21
+				86
 			],
 			"allTests": [
 				{
@@ -45,7 +45,7 @@
 			"id": "07c66041-15fe-483c-8361-33b7c84de9f5",
 			"name": "Get random qoute",
 			"url": "http://localhost:3000/api/v1/quotes/random",
-			"time": 171,
+			"time": 944,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -60,7 +60,7 @@
 				}
 			},
 			"times": [
-				171
+				944
 			],
 			"allTests": [
 				{
@@ -72,7 +72,7 @@
 			"id": "8f5e0461-f60d-4448-9eb5-cb125b595ae8",
 			"name": "TC05-Create a new quote",
 			"url": "http://localhost:3000/api/v1/quotes",
-			"time": 1302,
+			"time": 243,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -92,7 +92,7 @@
 				}
 			},
 			"times": [
-				1302
+				243
 			],
 			"allTests": [
 				{
@@ -105,7 +105,7 @@
 			"id": "108bf269-625a-4646-8816-7130710e15b3",
 			"name": "TC06-List quotes",
 			"url": "http://localhost:3000/api/v1/quotes/",
-			"time": 479,
+			"time": 47,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -125,7 +125,7 @@
 				}
 			},
 			"times": [
-				479
+				47
 			],
 			"allTests": [
 				{
@@ -137,8 +137,8 @@
 		{
 			"id": "03261cd8-4aa7-4269-ab6a-b966cf026841",
 			"name": "TC07-Update quotes",
-			"url": "http://localhost:3000/api/v1/quotes/_goLzH4BsKKdXe56Lyt6",
-			"time": 598,
+			"url": "http://localhost:3000/api/v1/quotes/X-L9G38B2AwfGVfDPNBd",
+			"time": 71,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -158,7 +158,7 @@
 				}
 			},
 			"times": [
-				598
+				71
 			],
 			"allTests": [
 				{
@@ -170,8 +170,8 @@
 		{
 			"id": "2c641967-f778-4d9c-8fcc-25891ca8141d",
 			"name": "TC09-Delete quotes",
-			"url": "http://localhost:3000/api/v1/quotes/_goLzH4BsKKdXe56Lyt6",
-			"time": 18,
+			"url": "http://localhost:3000/api/v1/quotes/X-L9G38B2AwfGVfDPNBd",
+			"time": 24,
 			"responseCode": {
 				"code": 204,
 				"name": "No Content"
@@ -186,7 +186,7 @@
 				}
 			},
 			"times": [
-				18
+				24
 			],
 			"allTests": [
 				{
@@ -196,7 +196,7 @@
 		}
 	],
 	"count": 1,
-	"totalTime": 2589,
+	"totalTime": 1415,
 	"collection": {
 		"requests": [
 			{

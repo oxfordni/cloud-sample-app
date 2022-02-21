@@ -177,6 +177,15 @@
 						],
 						"type": "text/javascript"
 					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"setTimeout(function () {}, 3000);"
+						],
+						"type": "text/javascript"
+					}
 				}
 			],
 			"request": {
@@ -261,9 +270,20 @@
 					"listen": "test",
 					"script": {
 						"exec": [
+							"setTimeout(function () {}, 3000);\r",
+							"\r",
 							"pm.test(\"Status code is 201\", function () {\r",
 							"    pm.response.to.have.status(201);\r",
 							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
 						],
 						"type": "text/javascript"
 					}
