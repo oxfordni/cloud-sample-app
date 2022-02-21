@@ -1,0 +1,203 @@
+{
+	"id": "4fdf6aad-d171-4797-ac58-52baec7a626d",
+	"name": "oni_user_api_tests",
+	"timestamp": "2022-02-05T22:45:05.268Z",
+	"collection_id": "0-645870c2-2af5-4a7f-be51-9de8443d10bd",
+	"folder_id": 0,
+	"environment_id": "62620880-17a7-4550-b024-f117dbf0f2af",
+	"totalPass": 10,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "9d4604e2-0dd9-425a-95f8-e1d04906a9b0",
+			"name": "TC01 - Create a new user",
+			"url": "http://localhost:8000/api/v1/users/",
+			"time": 871,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code is 201 and Successful POST request": true,
+				"Verify username": true,
+				"Verify user email": true
+			},
+			"testPassFailCounts": {
+				"Status code is 201 and Successful POST request": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Verify username": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Verify user email": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				871
+			],
+			"allTests": [
+				{
+					"Status code is 201 and Successful POST request": true,
+					"Verify username": true,
+					"Verify user email": true
+				}
+			]
+		},
+		{
+			"id": "9b55c94a-467e-4a1a-88b2-7b81279b141c",
+			"name": "TC02 - Create a group",
+			"url": "http://localhost:8000/api/v1/groups/",
+			"time": 52,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status code is 201": true,
+				"Verify group name": true
+			},
+			"testPassFailCounts": {
+				"Status code is 201": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Verify group name": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				52
+			],
+			"allTests": [
+				{
+					"Status code is 201": true,
+					"Verify group name": true
+				}
+			]
+		},
+		{
+			"id": "917fdbb6-7d78-42fd-a71a-732b70c70c58",
+			"name": "TC03- Create assign a group to a user",
+			"url": "http://localhost:8000/api/v1/users/21/",
+			"time": 686,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				686
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "c3a36597-0ff4-4a23-822c-bda05fb29366",
+			"name": "TC04a-List users",
+			"url": "http://localhost:8000/api/v1/users/",
+			"time": 87,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Verify username from the response": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Verify username from the response": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				87
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Verify username from the response": true
+				}
+			]
+		},
+		{
+			"id": "c99e03d7-c598-43c3-89d2-68462892e09b",
+			"name": "TC04b-List Groups",
+			"url": "http://localhost:8000/api/v1/groups/",
+			"time": 18,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"List of users and Body matches name": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 1,
+					"fail": 0
+				},
+				"List of users and Body matches name": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				18
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"List of users and Body matches name": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 1714,
+	"collection": {
+		"requests": [
+			{
+				"id": "9d4604e2-0dd9-425a-95f8-e1d04906a9b0",
+				"method": "POST"
+			},
+			{
+				"id": "9b55c94a-467e-4a1a-88b2-7b81279b141c",
+				"method": "POST"
+			},
+			{
+				"id": "917fdbb6-7d78-42fd-a71a-732b70c70c58",
+				"method": "PUT"
+			},
+			{
+				"id": "c3a36597-0ff4-4a23-822c-bda05fb29366",
+				"method": "GET"
+			},
+			{
+				"id": "c99e03d7-c598-43c3-89d2-68462892e09b",
+				"method": "GET"
+			}
+		]
+	}
+}

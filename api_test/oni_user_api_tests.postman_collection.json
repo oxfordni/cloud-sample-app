@@ -1,0 +1,318 @@
+{
+	"info": {
+		"_postman_id": "645870c2-2af5-4a7f-be51-9de8443d10bd",
+		"name": "oni_user_api_tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TC01 - Create a new user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201 and Successful POST request\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test(\"Verify username\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.username).to.eql(pm.variables.get('user_name'));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify user email\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.collectionVariables.set('user_url',jsonData.url);\r",
+							"    pm.expect(jsonData.email).to.eql(pm.variables.get('user_email'));\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**\r",
+							" * The faker code from the CDN is trying to set the faker object as a property of window, which is undefined in the Postman Sandbox. To work around this, we explicitly define window as an empty object before running the faker injection snippet.\r",
+							" */\r",
+							"\r",
+							"window = {};\r",
+							"\r",
+							"pm.sendRequest(\"https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.min.js\", (error, response) => {\r",
+							"    if (error || response.code !== 200) {\r",
+							"        pm.expect.fail('Could not load external library');\r",
+							"    }\r",
+							"\r",
+							"    eval(response.text());\r",
+							"\r",
+							"    // This is where you can set the locale. See faker.js docs for all available locales.\r",
+							"    window.faker.locale=\"en\";\r",
+							"    pm.collectionVariables.set(\"user_name\",window.faker.name.firstName());\r",
+							"    pm.collectionVariables.set(\"user_email\",window.faker.internet.email());\r",
+							"    pm.collectionVariables.set(\"group_name\", window.faker.random.word())\r",
+							"}); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{user_name}}\",\r\n    \"email\": \"{{user_email}}\",\r\n    \"groups\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{python_url}}/api/v1/users/",
+					"host": [
+						"{{python_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC02 - Create a group",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test(\"Verify group name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.collectionVariables.set('group_url',jsonData.url);\r",
+							"    pm.expect(jsonData.name).to.eql(pm.variables.get('group_name'));\r",
+							"});\r",
+							"\r",
+							"\r",
+							"    "
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{group_name}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{python_url}}/api/v1/groups/",
+					"host": [
+						"{{python_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"groups",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC03- Create assign a group to a user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{user_name}}\",\r\n    \"groups\": [\r\n        \"{{group_url}}\"\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{user_url}}",
+					"host": [
+						"{{user_url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC04a-List users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Verify username from the response\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(pm.collectionVariables.get('user_name'))\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{python_url}}/api/v1/users/",
+					"host": [
+						"{{python_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC04b-List Groups",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"List of users and Body matches name\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/api/v1/groups/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"groups",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "python_url",
+			"value": "localhost:8000",
+			"type": "default"
+		},
+		{
+			"key": "user_name",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "user_email",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "group_name",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "group_url",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "user_url",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

@@ -1,0 +1,379 @@
+{
+	"info": {
+		"_postman_id": "3ff2b189-816a-4a17-b418-e1c46b747665",
+		"name": "oni_quotes_api_tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "go-service-health-check",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Health ok\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.alive).to.eql(\"ok\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get random qoute",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/quotes/random",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"quotes",
+						"random"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC05-Create a new quote",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200 \", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Store id\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.collectionVariables.set('id',jsonData.id);\r",
+							"    //pm.expect(jsonData.id).to.eql(pm.variables.get('id'));\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"/**\r",
+							" * The faker code from the CDN is trying to set the faker object as a property of window, which is undefined in the Postman Sandbox. To work around this, we explicitly define window as an empty object before running the faker injection snippet.\r",
+							" */\r",
+							"\r",
+							"window = {};\r",
+							"\r",
+							"pm.sendRequest(\"https://cdnjs.cloudflare.com/ajax/libs/Faker/3.1.0/faker.min.js\", (error, response) => {\r",
+							"    if (error || response.code !== 200) {\r",
+							"        pm.expect.fail('Could not load external library');\r",
+							"    }\r",
+							"\r",
+							"    eval(response.text());\r",
+							"\r",
+							"    // This is where you can set the locale. See faker.js docs for all available locales.\r",
+							"    window.faker.locale=\"en\";\r",
+							"    pm.collectionVariables.set(\"\",window.faker.random.number());\r",
+							"    pm.collectionVariables.set(\"contain_adult_lang\",window.faker.random.boolean());\r",
+							"    pm.collectionVariables.set(\"show\", window.faker.random.words());\r",
+							"    pm.collectionVariables.set(\"role\", window.faker.random.words());\r",
+							"    pm.collectionVariables.set(\"quote\", window.faker.random.words())\r",
+							"    pm.collectionVariables.set(\"quote_update\", window.faker.random.words())\r",
+							"    \r",
+							"\r",
+							"}); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"quote\": \"{{quote}}\",\r\n    \"role\": \"{{role}}\",\r\n    \"show\": \"{{show}}\",\r\n    \"contain_adult_lang\": {{contain_adult_lang}},\r\n    \"id\":\"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{go_service_url}}/api/v1/quotes",
+					"host": [
+						"{{go_service_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"quotes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC06-List quotes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify id from the response\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(pm.collectionVariables.get('id'))\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"setTimeout(function () {}, 3000);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{go_service_url}}/api/v1/quotes/",
+					"host": [
+						"{{go_service_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"quotes",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC07-Update quotes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Compare the quotes\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.quote).to.eql(pm.variables.get('quote_update'));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n{\r\n    \"quote\": \"{{quote_update}}\",\r\n    \"role\": \"{{role}}\",\r\n    \"show\": \"{{show}}\",\r\n    \"contain_adult_lang\": {{contain_adult_lang}},\r\n    \"id\":\"{{id}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{go_service_url}}/api/v1/quotes/{{id}}",
+					"host": [
+						"{{go_service_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"quotes",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TC09-Delete quotes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"setTimeout(function () {}, 3000);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{go_service_url}}/api/v1/quotes/{{id}}",
+					"host": [
+						"{{go_service_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"quotes",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "go_service_url",
+			"value": "localhost:3000",
+			"type": "default"
+		},
+		{
+			"key": "id",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "contain_adult_lang",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "show",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "role",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "quote",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "quote_update",
+			"value": ""
+		},
+		{
+			"value": ""
+		}
+	]
+}

@@ -1,0 +1,40 @@
+# This is a basic workflow to help you get started with Actions
+name: CI
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ e2e-improvement ]
+  pull_request:
+    branches: [ e2e-improvement ]
+  # Allows you to run this workflow manually from the Actions tab
+  #workflow_dispatch:
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  run-tests:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: Install ChromeDriver
+        run: pip install chromedriver-py
+      - name: Build the stack
+        run: docker compose up -d --build   
+      - name: Test Frontend
+        run: docker exec frontend yarn test
+      - name: Test py backend
+        run: docker exec backend-py python manage.py test
+      - name: Test go backend
+        run: docker exec backend-go go test -run="" ./pkg/...
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: E2E test
+        run: |
+            pip install -r e2e_tests/requirements.txt
+            python e2e_tests/TestSuites.py
+      - name: Stop stack
+        run: docker compose down  
