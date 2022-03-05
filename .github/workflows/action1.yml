@@ -3,27 +3,27 @@ name: Build & Test #Name of the workflow
 on: [push, pull_request]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x]
+    # strategy:
+    #   matrix:
+    #     node-version: [14.x]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Git checkout
         uses: actions/checkout@v2
 
-      - name: Install Node JS ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
+      # - name: Install Node JS ${{ matrix.node-version }}
+      #   uses: actions/setup-node@v1
+      #   with:
+      #     node-version: ${{ matrix.node-version }}
 
-      - name: Run the API/Postman/Cypress tests
-        run: |
-          docker compose up -d --build
-          cd frontend && ./node_modules/.bin/cypress run
-          newman run ONI.postman_collection.json
+      - name: Build Docker stack
+        run: docker compose up -d --build
 
-        env:
-          CI: true
+      - name: Run Cypress tests
+        run: cd ./frontend && ././node_modules/.bin/cypress
+
+      - name: Run Postman tests
+        run: newman run ONI.postman_collection.json
