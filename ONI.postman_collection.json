@@ -1,0 +1,969 @@
+{
+	"info": {
+		"_postman_id": "19fd1583-7ff6-46bb-9795-3dc1d7a7a9be",
+		"name": "ONI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health",
+			"item": [
+				{
+					"name": "Python Server Health",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"let response = pm.response.json()",
+									"",
+									"pm.test(\"Response indicates alive:ok\", function () {",
+									"    pm.expect(response.alive).to.eql(\"ok\");",
+									"       ",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/py/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"py",
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Go Server Health",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"let response = pm.response.json()",
+									"",
+									"pm.test(\"Response indicates alive:ok\", function () {",
+									"    pm.expect(response.alive).to.eql(\"ok\");",
+									"       ",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/go/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"go",
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Quotes",
+			"item": [
+				{
+					"name": "Get Random Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/quotes/random",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"quotes",
+								"random"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"let response = pm.response.json();",
+									"",
+									"pm.test(\"Returns proper response values\", function () {",
+									"    pm.expect(response.quote).to.eql(\"Add New Quote Test\");",
+									"    pm.expect(response.role).to.eql(\"Test Role\");",
+									"    pm.expect(response.show).to.eql(\"Test Show\");",
+									"    pm.expect(response.contain_adult_lang).to.eql(false);",
+									"})",
+									"",
+									"pm.collectionVariables.set(\"newQuoteId\", response.id)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"quote\": \"Add New Quote Test\",\n  \"role\": \"Test Role\",\n  \"show\": \"Test Show\",\n  \"contain_adult_lang\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/quotes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"quotes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Quotes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3001/api/v1/quotes",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"quotes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Quote by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"let expectedId = pm.collectionVariables.get(\"newQuoteId\");",
+									"",
+									"pm.test(\"Response contains proper quote/values\", function () {",
+									"    let response = pm.response.json();",
+									"    pm.expect(response.id).to.eql(expectedId);",
+									"    pm.expect(response.quote).to.eql(\"Add New Quote Test\");",
+									"    pm.expect(response.role).to.eql(\"Test Role\");",
+									"    pm.expect(response.show).to.eql(\"Test Show\");",
+									"    pm.expect(response.contain_adult_lang).to.eql(false);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let id = pm.collectionVariables.get(\"newQuoteId\");",
+									"",
+									"console.log(id)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3001/api/v1/quotes/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"quotes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{newQuoteId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"let expectedId = pm.collectionVariables.get(\"newQuoteId\");",
+									"",
+									"pm.test(\"Response contains proper quote/values\", function () {",
+									"    let response = pm.response.json();",
+									"    pm.expect(response.id).to.eql(expectedId);",
+									"    pm.expect(response.quote).to.eql(\"Updated Quote\");",
+									"    pm.expect(response.role).to.eql(\"Updated Role\");",
+									"    pm.expect(response.show).to.eql(\"Updated Show\");",
+									"    pm.expect(response.contain_adult_lang).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"quote\": \"Updated Quote\",\n  \"role\": \"Updated Role\",\n  \"show\": \"Updated Show\",\n  \"contain_adult_lang\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/api/v1/quotes/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"quotes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{newQuoteId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Quote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3001/api/v1/quotes/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"quotes",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{newQuoteId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Response is an Array', () => pm.expect(pm.response.json()).to.be.an('array').but.not.an('object'))",
+									"",
+									"let response = pm.response.json();",
+									"",
+									"let responseLength = response.length;",
+									"console.log(responseLength)",
+									"pm.collectionVariables.set(\"startingLength\", responseLength);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3001/api/v1/users/",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"let response = pm.response.json();",
+									"let newUser = pm.collectionVariables.get(\"newUser\");",
+									"",
+									"let createdUserUrlArray = response.url.split(\"/\");",
+									"let createdUserId = createdUserUrlArray[createdUserUrlArray.length - 2]",
+									"pm.collectionVariables.set(\"createdUserId\", createdUserId);",
+									"",
+									"pm.test(\"Response contains proper values\", function () {",
+									"    pm.expect(response.username).to.eql(newUser);",
+									"    pm.expect(response.email).to.eql(`${newUser}@example.com`);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let userNum = pm.collectionVariables.get(\"startingLength\");",
+									"",
+									"let newUser = `Test${(userNum+1)*2}`;",
+									"",
+									"pm.collectionVariables.set(\"newUser\", newUser)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"{{newUser}}\",\n  \"email\": \"{{newUser}}@example.com\",\n  \"groups\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/api/v1/users/",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"let response = pm.response.json();",
+									"let newUser = pm.collectionVariables.get(\"newUser\");",
+									"",
+									"let createdUserUrlArray = response.url.split(\"/\");",
+									"let createdUserId = createdUserUrlArray[createdUserUrlArray.length - 2]",
+									"pm.collectionVariables.set(\"createdUserId\", createdUserId);",
+									"",
+									"pm.test(\"Response contains proper values\", function () {",
+									"    pm.expect(response.username).to.eql(newUser);",
+									"    pm.expect(response.email).to.eql(`${newUser}@example.com`);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/users/:id/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								":id",
+								""
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{createdUserId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"let response = pm.response.json();",
+									"let updatedUsername = pm.collectionVariables.get(\"updatedUsername\")",
+									"pm.test(\"Response contains updated values\", function () {",
+									"    pm.expect(response.username).to.eql(updatedUsername);",
+									"    pm.expect(response.email).to.eql(\"updatedUser@example.com\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let newUser = pm.collectionVariables.get(\"newUser\");",
+									"let updatedUsername = `updated${newUser}`",
+									"console.log(updatedUsername)",
+									"pm.collectionVariables.set(\"updatedUsername\", updatedUsername)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"{{updatedUsername}}\",\n  \"email\": \"updatedUser@example.com\",\n  \"groups\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/users/:id/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								":id",
+								""
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{createdUserId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/users/:id/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								":id",
+								""
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{createdUserId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Groups",
+			"item": [
+				{
+					"name": "Get All Groups",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"pm.test('Response is an Array', () => pm.expect(pm.response.json()).to.be.an('array').but.not.an('object'))",
+									"",
+									"let response = pm.response.json();",
+									"",
+									"let startingLength = response.length;",
+									"",
+									"pm.collectionVariables.set(\"startingLength\", startingLength)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3001/api/v1/groups/",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"groups",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"let response = pm.response.json();",
+									"let newGroup = pm.collectionVariables.get(\"newGroup\");",
+									"",
+									"let createdGroupUrlArray = response.url.split(\"/\");",
+									"let createdGroupId = createdGroupUrlArray[createdGroupUrlArray.length - 2]",
+									"pm.collectionVariables.set(\"createdGroupId\", createdGroupId);",
+									"",
+									"pm.test(\"Response contains proper values\", function () {",
+									"    pm.expect(response.name).to.eql(newGroup);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let userNum = pm.collectionVariables.get(\"startingLength\")",
+									"let newGroup = `Test${userNum+1}`;",
+									"",
+									"pm.collectionVariables.set(\"newGroup\", newGroup)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"{{newGroup}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3001/api/v1/groups/",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"groups",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Group by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"let response = pm.response.json();",
+									"let newGroup = pm.collectionVariables.get(\"newGroup\");",
+									"",
+									"let createdGroupUrlArray = response.url.split(\"/\");",
+									"let createdGroupId = createdGroupUrlArray[createdGroupUrlArray.length - 2]",
+									"pm.collectionVariables.set(\"createdGroupId\", createdGroupId);",
+									"",
+									"pm.test(\"Response contains proper values\", function () {",
+									"    pm.expect(response.name).to.eql(newGroup);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/groups/:id/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"groups",
+								":id",
+								""
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{createdGroupId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"let response = pm.response.json();",
+									"",
+									"pm.test(\"Response contains updated values\", function () {",
+									"    pm.expect(response.name).to.eql(\"updatedGroup\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"updatedGroup\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/api/v1/groups/:id/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"groups",
+								":id",
+								""
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{createdGroupId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Group",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/api/v1/groups/:id/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"api",
+								"v1",
+								"groups",
+								":id",
+								""
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{createdGroupId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "newQuoteId",
+			"value": ""
+		},
+		{
+			"key": "newUser",
+			"value": ""
+		},
+		{
+			"key": "createdUserId",
+			"value": ""
+		},
+		{
+			"key": "newGroup",
+			"value": ""
+		},
+		{
+			"key": "createdGroupId",
+			"value": ""
+		},
+		{
+			"key": "startingLength",
+			"value": ""
+		},
+		{
+			"key": "updatedUsername",
+			"value": ""
+		}
+	]
+}

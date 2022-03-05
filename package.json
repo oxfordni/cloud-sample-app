@@ -1,0 +1,25 @@
+{
+  "name": "cloud-sample-app",
+  "version": "1.0.0",
+  "description": "It goes! (go+es)",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rmac2289/cloud-sample-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rmac2289/cloud-sample-app/issues"
+  },
+  "homepage": "https://github.com/rmac2289/cloud-sample-app#readme",
+  "dependencies": {
+    "newman": "^5.3.2"
+  }
+}
