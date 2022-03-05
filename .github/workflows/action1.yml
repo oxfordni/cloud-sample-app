@@ -22,7 +22,7 @@ jobs:
       - name: Run the API/Postman/Cypress tests
         run: |
           docker compose up -d --build
-          ./node_modules/.bin/cypress run
+          cd frontend && ./node_modules/.bin/cypress run
           newman run ONI.postman_collection.json
 
         env:
