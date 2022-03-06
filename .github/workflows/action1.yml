@@ -22,9 +22,8 @@ jobs:
 
       - name: Run Tests
         uses: cypress-io/github-action@v2
-        run: cd ./frontend
         with:
-          start: cd .. && docker compose up -d --build
+          start: docker compose up -d --build && cd ./frontend
           wait-on: "http://localhost:3001"
           wait-on-timeout: 5000
           browser: chrome
