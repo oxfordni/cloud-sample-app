@@ -19,10 +19,13 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Build & Run Tests
-        run: |
-          docker compose up -d --build
-          npm test
+      - name: Run Tests
+        uses: cypress-io/github-action@v2
+        with:
+          start: docker compose up -d --build
+          wait-on: "http://localhost:3001"
+          browser: chrome
+          headless: true
 
         env:
           CI: true
