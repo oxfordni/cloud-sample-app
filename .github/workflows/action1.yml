@@ -19,13 +19,13 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Build/Test
+      - name: Run the API/Postman Tests
         run: |
-          docker compose up -d --build & 
-          sleep 20
-          npm test
+          docker compose up -d --build
+          newman run ONI.postman_collection.json
+
+      - name: Run Cypress Tests
+        run: npm test
 
         env:
-          API_HOST: 0.0.0.0
-          DB_HOST: localhost
           CI: true
