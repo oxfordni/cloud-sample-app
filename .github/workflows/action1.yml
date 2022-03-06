@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: cypress/included:8.0.0
     strategy:
       matrix:
         node-version: [14.x]
@@ -21,8 +22,9 @@ jobs:
 
       - name: Run Tests
         uses: cypress-io/github-action@v2
+        run: cd ./frontend
         with:
-          start: docker compose up -d --build
+          start: cd .. && docker compose up -d --build
           wait-on: "http://localhost:3001"
           wait-on-timeout: 5000
           browser: chrome
