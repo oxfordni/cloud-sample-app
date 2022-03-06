@@ -19,10 +19,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Run the API and Postman's tests
+      - name: Build/Test
         run: |
           docker compose up -d --build &
-          sleep 500
           npm test
 
         env:
