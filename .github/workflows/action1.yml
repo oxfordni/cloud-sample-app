@@ -1,0 +1,31 @@
+name: Build & Test #Name of the workflow
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Install Node JS ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Run the API/Postman Tests
+        run: |
+          docker compose up -d --build
+          newman run ONI.postman_collection.json
+
+      - name: Run Cypress Tests
+        run: npm test
+
+        env:
+          CI: true
