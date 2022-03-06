@@ -1,3 +1,13 @@
+# Testing Notes
+
+I wrote my API tests in a Postman collection and added the exported JSON file to my repo in order to perform tests via CLI with Newman.
+
+E2E testing was written in Cypress.
+
+Created a .github/workflow folder with a yml file to run a github action on every push and pull request.
+
+If I had more time, I would: - Fine-tune the github action, where I'm building/testing the application on every push & pull request. - Create more unit tests within the Go/Python backends (my experience is more geared toward JavaScript at this point, so taking a deep dive would take a bit of time.) - Create more validations within the E2E & API tests.
+
 # goes
 
 It goes! (go+es)
